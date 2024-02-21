@@ -1,15 +1,41 @@
-// // const express = require('express');
-// const path = require('path');
-// const http = require('http');
-// const express = require('express');
-// const socketio = require('socket.io');
-// const app = express();
-// const server = http.createServer(app);
-// // const io = socketio(server);
+const chatForm = document.getElementById('chat-form');
 
-// const io = socketio(server);
 const socket = io();
 
+// Message from server
 socket.on('message', message =>{
    console.log(message);   // here in client side we are recieving message which is send from server side io.on
-});
+   outputMessage(message);
+  });
+
+// Message submit
+
+chatForm.addEventListener('submit', (e)=>{
+   e.preventDefault();
+
+  // Get message text
+
+   const msg = e.target.elements.msg.value;
+
+  //  Emit message to server 
+   socket.emit('chatMessage',msg);
+  
+   //  console.log(msg);
+
+
+})
+
+
+// Output message to DOM
+
+function outputMessage(message){
+    const div = document.createElement('div');
+    div.classList.add('message');
+    div.innerHTML = `<p class ="meta">Brad<span>9:12pm</span></p>
+     <p class = "text">
+       ${message}
+     </p>`;
+     document.querySelector('.chat-messages').appendChild(div);
+     
+}
+
